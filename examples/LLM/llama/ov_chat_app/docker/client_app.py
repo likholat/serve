@@ -42,19 +42,30 @@ with st.sidebar:
 
 prompt = st.text_input("Text Prompt", "An astronaut riding a horse")
 
-def generate_sd_response(prompt_input):
+#TODO: For Tests, delete when LLM added
+prompt = [prompt,
+          "A robot playing a violin",
+          "A dragon flying over the mountains",
+          "A mermaid painting a sunset on the beach"
+        ]
+
+def generate_sd_response_v1(prompt_input):
     url = f"http://127.0.0.1:8080/predictions/{MODEL_NAME_SD}"
-    data = json.dumps(
-        {
-            "prompt": prompt_input
-        }
-    )
+    response = []
+    for pr in prompt_input:
+        data = json.dumps(
+            {
+                "prompt": pr
+            }
+        )
+        response.append(requests.post(url=url, data=data).text)
+    return response
 
-    res = requests.post(url=url, data=data)
-    return res
+def response_postprocess(response):
+    return [Image.fromarray(np.array(json.loads(text), dtype="uint8")) for text in response]
 
-if st.button("Generate Image"):
-    with st.spinner('Generating image...'):
-        res = generate_sd_response(prompt)
-        image = Image.fromarray(np.array(json.loads(res.text), dtype="uint8"))
-        st.image(image, caption="Generated Image", use_column_width=True)
+if st.button("Generate Images"):
+    with st.spinner('Generating images...'):
+        res = generate_sd_response_v1(prompt)
+        images = response_postprocess(res)
+        st.image(images, caption=["Generated Image"] * len(images), use_column_width=True)
