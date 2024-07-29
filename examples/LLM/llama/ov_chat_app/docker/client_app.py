@@ -76,10 +76,10 @@ with st.sidebar:
         "guidance_scale", min_value=1.0, max_value=30.0, value=5.0, step=0.5
     )
     height = st.sidebar.slider(
-        "height", min_value=256, max_value=2048, value=768, step=8
+        "height", min_value=256, max_value=2048, value=512, step=8
     )
     width = st.sidebar.slider(
-        "width", min_value=256, max_value=2048, value=768, step=8
+        "width", min_value=256, max_value=2048, value=512, step=8
     )
 
     # st.subheader("LLM Model parameters")

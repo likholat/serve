@@ -20,7 +20,7 @@ st.set_page_config(page_title="TorchServe Server")
 
 def start_server():
     subprocess.run(
-        ["torchserve --start --ts-config /home/model-server/config.properties"],
+        ["torchserve --start --ts-config /home/model-server/config.properties --disable-token-auth --enable-model-api"],
         shell=True,
         check=True,
     )
@@ -189,7 +189,7 @@ with st.sidebar:
         key="Num Workers SD",
         min_value=1,
         max_value=4,
-        value=2,
+        value=1,
         step=1,
         on_change=scale_sd_workers,
         args=("Num Workers SD",),
